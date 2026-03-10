@@ -1,96 +1,119 @@
-# Obsidian Sample Plugin
+# HexVision
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+> This is a fork of [Benjamin-Park/obsidian-hexvision](https://github.com/Benjamin-Park/obsidian-hexvision).
 
-This project uses Typescript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in Typescript Definition format, which contains TSDoc comments describing what it does.
+An [Obsidian](https://obsidian.md) plugin that renders inline colour swatches next to hex colour codes anywhere in your notes — automatically, as you type, in both editing and reading views.
 
-**Note:** The Obsidian API is still in early alpha and is subject to change at any time!
+## What it does
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+Whenever HexVision sees a 6-digit hex colour code (e.g. `#ff5733`) in a note, it places a small coloured square immediately before it. The hex code itself is styled using your theme's muted monospace colour so it stays readable without competing with the swatch.
 
-## First time developing plugins?
+This works the same way Bear and Claude render hex codes — no special syntax, no code blocks required.
 
-Quick starting guide for new plugin devs:
+**Before**
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
-
-## Releasing new releases
-
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
-
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
-
-## Adding your plugin to the community plugin list
-
-- Check https://github.com/obsidianmd/obsidian-releases/blob/master/plugin-review.md
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
-
-## How to use
-
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
-
-## Manually installing the plugin
-
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
-
-## Improve code quality with eslint (optional)
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
-- To use eslint to analyze this project use this command:
-  - `eslint main.ts`
-  - eslint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
-  - `eslint .\src\`
-
-## Funding URL
-
-You can include funding URLs where people who use your plugin can financially support it.
-
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
-
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
+```
+The brand primary is #1a73e8 and the accent is #ff5733.
 ```
 
-If you have multiple URLs, you can also do:
+**After** *(as rendered in Obsidian)*
 
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
+```
+The brand primary is 🟦 #1a73e8 and the accent is 🟧 #ff5733.
+```
+*(rendered as actual colour squares, not emoji)*
+
+## Features
+
+- **Always-on** — activates on every note automatically; no opt-in syntax needed
+- **Live as you type** — swatches appear the moment a valid 6-digit hex code is complete in the editor
+- **Reading view + Live Preview** — works in both rendering modes
+- **Tag conflict prevention** — Obsidian normally interprets letter-leading hex codes like `#ff0000` as vault tags; HexVision intercepts these and renders them as colour swatches instead
+- **Code blocks respected** — hex codes inside inline code spans (`` `#ff0000` ``) and fenced code blocks are left untouched
+- **Theme-aware** — swatch border and text colour adapt to your current Obsidian theme via CSS variables
+- **Mobile compatible** — no desktop-only APIs used
+
+## Supported formats
+
+| Format | Example | Supported |
+|--------|---------|-----------|
+| 6-digit lowercase | `#ff0000` | ✅ |
+| 6-digit uppercase | `#FF0000` | ✅ |
+| 6-digit mixed case | `#Ff0000` | ✅ |
+| 3-digit shorthand | `#f00` | ❌ |
+| 8-digit with alpha | `#ff0000ff` | ❌ |
+| Named colours | `red`, `coral` | ❌ |
+| RGB / HSL functions | `rgb(255,0,0)` | ❌ |
+
+## Installation
+
+### From the Obsidian community plugin list *(once published)*
+
+1. Open **Settings → Community plugins**
+2. Search for **HexVision**
+3. Click **Install**, then **Enable**
+
+### Manual installation
+
+1. Download `main.js`, `styles.css`, and `manifest.json` from the [latest release](https://github.com/fulcrumdelta/obsidian-hexvision/releases)
+2. Copy the three files into `<your vault>/.obsidian/plugins/obsidian-hexvision/`
+3. Reload Obsidian and enable the plugin under **Settings → Community plugins**
+
+## Development
+
+### Prerequisites
+
+- Node.js 16 or later
+- npm
+
+### Build
+
+```bash
+npm install
+npm run build
 ```
 
-## API Documentation
+### Watch mode (rebuilds on save)
 
-See https://github.com/obsidianmd/obsidian-api
+```bash
+npm run dev
+```
+
+### Tests
+
+The test suite uses Node's built-in `node:test` runner — no additional installation required.
+
+```bash
+npm test
+```
+
+Unit tests cover the hex colour detection utilities (`hex-utils.ts`). Manual test scenarios are provided in [`tests/fixtures/test-note.md`](tests/fixtures/test-note.md) — open that file in Obsidian with the plugin enabled to visually validate all rendering cases.
+
+### Project structure
+
+```
+obsidian-hexvision/
+├── main.ts                        # Plugin entry point
+├── hex-utils.ts                   # Pure hex colour utilities (regex, validation)
+├── styles.css                     # Swatch and code text styles
+├── tests/
+│   ├── hex-utils.test.ts          # Unit tests
+│   └── fixtures/
+│       └── test-note.md           # Manual test scenarios
+├── manifest.json                  # Obsidian plugin manifest
+└── package.json
+```
+
+## Compatibility
+
+- **Minimum Obsidian version:** 0.15.0
+- **Desktop:** ✅
+- **Mobile:** ✅
+
+## Author
+
+[LooselySupervised](https://github.com/LooselySupervised)
+
+## Licence
+
+MIT
