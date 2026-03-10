@@ -1,16 +1,33 @@
-/*
-
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
-
-If your plugin does not need CSS, delete this file.
-
-*/
-.language-hex {
-    color: blueviolet !important;
-    background-color: coral !important;
+/* Coloured swatch blob rendered before each hex code */
+.hex-swatch {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	border-radius: 3px;
+	margin-right: 0.2em;
+	vertical-align: middle;
+	border: 1px solid rgba(128, 128, 128, 0.3);
+	flex-shrink: 0;
 }
 
-.colour-table {
-    
+/* Hex code text — uses theme muted colour and monospace font */
+.hex-color-code {
+	color: var(--text-muted);
+	font-family: var(--font-monospace);
+}
+
+/*
+ * In live-preview (editor) mode, Obsidian decorates hex codes that start with
+ * a letter (e.g. #ff0000) as tag links using .cm-hashtag. Override that
+ * styling when our own .hex-color-code mark is also present so the hex code
+ * looks like code, not a clickable tag.
+ */
+.cm-line .hex-color-code,
+.cm-line .hex-color-code .cm-hashtag,
+.cm-line .hex-color-code .cm-hashtag-begin,
+.cm-line .hex-color-code .cm-hashtag-end,
+.cm-line .cm-hashtag.hex-color-code {
+	color: var(--text-muted) !important;
+	text-decoration: none !important;
+	cursor: text !important;
 }
