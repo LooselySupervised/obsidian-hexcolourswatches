@@ -35,7 +35,9 @@ function createSwatchEl(color: string): HTMLElement {
  */
 function replaceTags(el: HTMLElement): void {
 	el.querySelectorAll<HTMLAnchorElement>('a.tag').forEach((tagEl) => {
-		const text = (tagEl.textContent ?? '').trim();
+		const raw = (tagEl.textContent ?? '').trim();
+		// Obsidian may or may not include the '#' in the tag's text content.
+		const text = raw.startsWith('#') ? raw : '#' + raw;
 		if (!isHexColor(text)) return;
 
 		const frag = document.createDocumentFragment();
@@ -63,7 +65,12 @@ function replaceTextNodes(el: HTMLElement): void {
 			acceptNode(node: Node): number {
 				let parent = (node as Text).parentElement;
 				while (parent && parent !== el) {
-					if (parent.tagName === 'CODE' || parent.tagName === 'PRE') {
+					const tag = parent.tagName;
+					const cls = parent.className;
+					if (tag === 'CODE' || tag === 'PRE') {
+						return NodeFilter.FILTER_REJECT;
+					}
+					if (cls === 'hex-color-code' || cls === 'hex-swatch') {
 						return NodeFilter.FILTER_REJECT;
 					}
 					parent = parent.parentElement;

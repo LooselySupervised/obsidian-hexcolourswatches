@@ -7,7 +7,7 @@
  * state when the regex is used with exec() in a loop.
  */
 export function hexRegex(): RegExp {
-	return /#[0-9A-Fa-f]{6}(?![0-9A-Fa-f])/g;
+	return /(?<!\\)#[0-9A-Fa-f]{6}(?![0-9A-Fa-f])/g;
 }
 
 /**

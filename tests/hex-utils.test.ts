@@ -145,4 +145,20 @@ describe('hexRegex', () => {
 		const matches = [...text.matchAll(hexRegex())];
 		assert.strictEqual(matches[0].index, 7);
 	});
+
+	it('does NOT match a backslash-escaped hex code', () => {
+		const matches = [...'\\#ff0000'.matchAll(hexRegex())];
+		assert.strictEqual(matches.length, 0);
+	});
+
+	it('does NOT match an escaped hex code embedded in prose', () => {
+		const matches = [...'use \\#007BA7 for links'.matchAll(hexRegex())];
+		assert.strictEqual(matches.length, 0);
+	});
+
+	it('matches an unescaped hex while ignoring adjacent escaped one', () => {
+		const matches = [...'\\#ff0000 and #00ff00'.matchAll(hexRegex())];
+		assert.strictEqual(matches.length, 1);
+		assert.strictEqual(matches[0][0], '#00ff00');
+	});
 });
