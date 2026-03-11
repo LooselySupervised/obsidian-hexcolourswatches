@@ -1,13 +1,13 @@
 {
-	"name": "obsidian-hexvision",
+	"name": "hex-colour-swatches",
 	"version": "1.0.0",
-	"description": "Inline hex colour preview for Obsidian notes",
+	"description": "Renders inline colour swatches next to hex colour codes in your Obsidian notes",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"version": "node version-bump.mjs && git add manifest.json versions.json",
-		"test": "esbuild tests/hex-utils.test.ts --bundle --platform=node --outfile=/tmp/hexvision-test.js && node /tmp/hexvision-test.js"
+		"test": "esbuild tests/hex-utils.test.ts --bundle --platform=node --outfile=/tmp/hex-colour-swatches-test.js && node /tmp/hex-colour-swatches-test.js"
 	},
 	"keywords": [],
 	"author": "",

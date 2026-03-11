@@ -1,6 +1,6 @@
-# HexVision — Manual Test Scenarios
+# HexColourSwatches — Manual Test Scenarios
 
-Open this file in Obsidian with the HexVision plugin enabled.
+Open this file in Obsidian with the HexColourSwatches plugin enabled.
 Each scenario states what you should see. Test in both **Reading view** and
 **Live Preview** (editing) mode unless stated otherwise.
 

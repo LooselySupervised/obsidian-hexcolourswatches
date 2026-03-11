@@ -1,12 +1,12 @@
-# HexVision
+# HexColourSwatches
 
 > This is a fork of [Benjamin-Park/obsidian-hexvision](https://github.com/Benjamin-Park/obsidian-hexvision).
 
-An [Obsidian](https://obsidian.md) plugin that renders inline colour swatches next to hex colour codes anywhere in your notes — automatically, as you type, in both editing and reading views.
+An [Obsidian](https://obsidian.md) plugin that renders inline colour swatches next to hex colour codes in your notes — automatically, as you type, in both editing and reading views.
 
 ## What it does
 
-Whenever HexVision sees a 6-digit hex colour code (e.g. `#ff5733`) in a note, it places a small coloured square immediately before it. The hex code itself is styled using your theme's muted monospace colour so it stays readable without competing with the swatch.
+Whenever HexColourSwatches sees a 6-digit hex colour code (e.g. `#ff5733`) in a note, it places a small coloured square immediately before it. The hex code itself is styled using your theme's muted monospace colour so it stays readable without competing with the swatch.
 
 This works the same way Bear and Claude render hex codes — no special syntax, no code blocks required.
 
@@ -28,7 +28,7 @@ The brand primary is 🟦 #1a73e8 and the accent is 🟧 #ff5733.
 - **Always-on** — activates on every note automatically; no opt-in syntax needed
 - **Live as you type** — swatches appear the moment a valid 6-digit hex code is complete in the editor
 - **Reading view + Live Preview** — works in both rendering modes
-- **Tag conflict prevention** — Obsidian normally interprets letter-leading hex codes like `#ff0000` as vault tags; HexVision intercepts these and renders them as colour swatches instead
+- **Tag conflict prevention** — Obsidian normally interprets letter-leading hex codes like `#ff0000` as vault tags; HexColourSwatches intercepts these and renders them as colour swatches instead
 - **Code blocks respected** — hex codes inside inline code spans (`` `#ff0000` ``) and fenced code blocks are left untouched
 - **Theme-aware** — swatch border and text colour adapt to your current Obsidian theme via CSS variables
 - **Mobile compatible** — no desktop-only APIs used
@@ -50,13 +50,13 @@ The brand primary is 🟦 #1a73e8 and the accent is 🟧 #ff5733.
 ### From the Obsidian community plugin list *(once published)*
 
 1. Open **Settings → Community plugins**
-2. Search for **HexVision**
+2. Search for **HexColourSwatches**
 3. Click **Install**, then **Enable**
 
 ### Manual installation
 
-1. Download `main.js`, `styles.css`, and `manifest.json` from the [latest release](https://github.com/fulcrumdelta/obsidian-hexvision/releases)
-2. Copy the three files into `<your vault>/.obsidian/plugins/obsidian-hexvision/`
+1. Download `main.js`, `styles.css`, and `manifest.json` from the [latest release](https://github.com/LooselySupervised/HexColourSwatches/releases)
+2. Copy the three files into `<your vault>/.obsidian/plugins/hex-colour-swatches/`
 3. Reload Obsidian and enable the plugin under **Settings → Community plugins**
 
 ## Development
@@ -92,7 +92,7 @@ Unit tests cover the hex colour detection utilities (`hex-utils.ts`). Manual tes
 ### Project structure
 
 ```
-obsidian-hexvision/
+hex-colour-swatches/
 ├── main.ts                        # Plugin entry point
 ├── hex-utils.ts                   # Pure hex colour utilities (regex, validation)
 ├── styles.css                     # Swatch and code text styles

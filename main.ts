@@ -207,7 +207,7 @@ const editorPlugin = ViewPlugin.fromClass(
 // Plugin entry point
 // ---------------------------------------------------------------------------
 
-export default class HexVision extends Plugin {
+export default class HexColourSwatches extends Plugin {
 	async onload() {
 		this.registerMarkdownPostProcessor(postProcessor);
 		this.registerEditorExtension(editorPlugin);
