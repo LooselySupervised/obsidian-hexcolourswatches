@@ -57,7 +57,7 @@ The brand primary is 🟦 #1a73e8 and the accent is 🟧 #ff5733.
 
 ### Manual installation from a release
 
-1. Download `main.js`, `styles.css`, and `manifest.json` from the [latest release](https://github.com/LooselySupervised/HexColourSwatches/releases)
+1. Download `main.js`, `styles.css`, and `manifest.json` from the [latest release](https://github.com/LooselySupervised/obsidian-hexcolourswatches/releases/latest)
 2. Copy the three files into `<your vault>/.obsidian/plugins/hex-colour-swatches/`
 3. Reload Obsidian and enable the plugin under **Settings → Community plugins**
 
