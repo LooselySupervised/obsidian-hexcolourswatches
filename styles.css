@@ -15,19 +15,3 @@
 	color: var(--text-muted);
 	font-family: var(--font-monospace);
 }
-
-/*
- * In live-preview (editor) mode, Obsidian decorates hex codes that start with
- * a letter (e.g. #ff0000) as tag links using .cm-hashtag. Override that
- * styling when our own .hex-color-code mark is also present so the hex code
- * looks like code, not a clickable tag.
- */
-.cm-line .hex-color-code,
-.cm-line .hex-color-code .cm-hashtag,
-.cm-line .hex-color-code .cm-hashtag-begin,
-.cm-line .hex-color-code .cm-hashtag-end,
-.cm-line .cm-hashtag.hex-color-code {
-	color: var(--text-muted) !important;
-	text-decoration: none !important;
-	cursor: text !important;
-}

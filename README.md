@@ -2,18 +2,18 @@
 
 > This is a fork of [Benjamin-Park/obsidian-hexvision](https://github.com/Benjamin-Park/obsidian-hexvision).
 
-An [Obsidian](https://obsidian.md) plugin that renders inline colour swatches next to hex colour codes in your notes — automatically, as you type, in both editing and reading views.
+An [Obsidian](https://obsidian.md) plugin that renders inline colour swatches next to hex colour codes in your notes — in both editing and reading views.
 
 ## What it does
 
-Whenever HexColourSwatches sees a 6-digit hex colour code (e.g. `#ff5733`) in a note, it places a small coloured square immediately before it. The hex code itself is styled using your theme's muted monospace colour so it stays readable without competing with the swatch.
+Write `\#RRGGBB` (backslash-escaped hex code) anywhere in a note and HexColourSwatches places a small coloured square immediately before it, with the hex code styled in your theme's muted monospace colour.
 
-This works the same way Bear and Claude render hex codes — no special syntax, no code blocks required.
+Using a backslash prefix avoids conflicting with Obsidian's tag system, which treats any `#word` as a vault tag. The backslash tells HexColourSwatches "this is a colour, not a tag", and Obsidian's tag indexer ignores it.
 
 **Before**
 
 ```
-The brand primary is #1a73e8 and the accent is #ff5733.
+The brand primary is \#1a73e8 and the accent is \#ff5733.
 ```
 
 **After** *(as rendered in Obsidian)*
@@ -25,11 +25,12 @@ The brand primary is 🟦 #1a73e8 and the accent is 🟧 #ff5733.
 
 ## Features
 
-- **Always-on** — activates on every note automatically; no opt-in syntax needed
-- **Live as you type** — swatches appear the moment a valid 6-digit hex code is complete in the editor
+- **Simple syntax** — prefix any 6-digit hex code with `\#` to get a swatch
+- **Live as you type** — swatch appears the moment the 6th hex digit is complete
 - **Reading view + Live Preview** — works in both rendering modes
-- **Tag conflict prevention** — Obsidian normally interprets letter-leading hex codes like `#ff0000` as vault tags; HexColourSwatches intercepts these and renders them as colour swatches instead
-- **Code blocks respected** — hex codes inside inline code spans (`` `#ff0000` ``) and fenced code blocks are left untouched
+- **No tag conflicts** — unescaped `#ff0000` remains a normal Obsidian tag; only `\#ff0000` becomes a swatch
+- **Code blocks respected** — hex codes inside inline code spans (`` `\#ff0000` ``) and fenced code blocks are left untouched
+- **Cursor-aware** — in the editor, the raw `\#RRGGBB` text is shown when your cursor is on it so you can edit it easily
 - **Theme-aware** — swatch border and text colour adapt to your current Obsidian theme via CSS variables
 - **Mobile compatible** — no desktop-only APIs used
 
@@ -37,13 +38,14 @@ The brand primary is 🟦 #1a73e8 and the accent is 🟧 #ff5733.
 
 | Format | Example | Supported |
 |--------|---------|-----------|
-| 6-digit lowercase | `#ff0000` | ✅ |
-| 6-digit uppercase | `#FF0000` | ✅ |
-| 6-digit mixed case | `#Ff0000` | ✅ |
-| 3-digit shorthand | `#f00` | ❌ |
-| 8-digit with alpha | `#ff0000ff` | ❌ |
+| 6-digit lowercase | `\#ff0000` | ✅ |
+| 6-digit uppercase | `\#FF0000` | ✅ |
+| 6-digit mixed case | `\#Ff0000` | ✅ |
+| 3-digit shorthand | `\#f00` | ❌ |
+| 8-digit with alpha | `\#ff0000ff` | ❌ |
 | Named colours | `red`, `coral` | ❌ |
 | RGB / HSL functions | `rgb(255,0,0)` | ❌ |
+| Unescaped (tag) | `#ff0000` | ❌ (treated as Obsidian tag) |
 
 ## Installation
 

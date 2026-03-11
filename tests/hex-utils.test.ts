@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { hexRegex, isHexColor } from '../hex-utils';
+import { hexRegex, escapedHexRegex, isHexColor } from '../hex-utils';
 
 // ---------------------------------------------------------------------------
 // isHexColor
@@ -146,19 +146,82 @@ describe('hexRegex', () => {
 		assert.strictEqual(matches[0].index, 7);
 	});
 
-	it('does NOT match a backslash-escaped hex code', () => {
+	it('matches a hex code even when preceded by a backslash (DOM text never has raw backslashes)', () => {
+		// In reading-view DOM, Obsidian strips the \ so text nodes only contain #RRGGBB.
+		// hexRegex is used on DOM text, so it must match #RRGGBB regardless of what precedes it.
 		const matches = [...'\\#ff0000'.matchAll(hexRegex())];
-		assert.strictEqual(matches.length, 0);
-	});
-
-	it('does NOT match an escaped hex code embedded in prose', () => {
-		const matches = [...'use \\#007BA7 for links'.matchAll(hexRegex())];
-		assert.strictEqual(matches.length, 0);
-	});
-
-	it('matches an unescaped hex while ignoring adjacent escaped one', () => {
-		const matches = [...'\\#ff0000 and #00ff00'.matchAll(hexRegex())];
 		assert.strictEqual(matches.length, 1);
-		assert.strictEqual(matches[0][0], '#00ff00');
+		assert.strictEqual(matches[0][0], '#ff0000');
+	});
+});
+
+// ---------------------------------------------------------------------------
+// escapedHexRegex
+// ---------------------------------------------------------------------------
+
+describe('escapedHexRegex', () => {
+	it('matches a backslash-escaped hex code', () => {
+		const matches = [...'\\#ff0000'.matchAll(escapedHexRegex())];
+		assert.strictEqual(matches.length, 1);
+		assert.strictEqual(matches[0][0], '\\#ff0000');
+	});
+
+	it('matches an escaped hex code embedded in prose', () => {
+		const matches = [...'use \\#007BA7 for links'.matchAll(escapedHexRegex())];
+		assert.strictEqual(matches.length, 1);
+		assert.strictEqual(matches[0][0], '\\#007BA7');
+	});
+
+	it('does NOT match an unescaped hex code', () => {
+		const matches = [...'#ff0000'.matchAll(escapedHexRegex())];
+		assert.strictEqual(matches.length, 0);
+	});
+
+	it('matches multiple escaped hex codes', () => {
+		const matches = [...'\\#ff0000 and \\#00ff00'.matchAll(escapedHexRegex())];
+		assert.strictEqual(matches.length, 2);
+		assert.deepStrictEqual(matches.map(m => m[0]), ['\\#ff0000', '\\#00ff00']);
+	});
+
+	it('matches an escaped all-digit hex code', () => {
+		const matches = [...'\\#123456'.matchAll(escapedHexRegex())];
+		assert.strictEqual(matches.length, 1);
+		assert.strictEqual(matches[0][0], '\\#123456');
+	});
+
+	it('matches an escaped uppercase hex code', () => {
+		const matches = [...'\\#FF0000'.matchAll(escapedHexRegex())];
+		assert.strictEqual(matches.length, 1);
+		assert.strictEqual(matches[0][0], '\\#FF0000');
+	});
+
+	it('does NOT match a 7-digit escaped string (lookahead)', () => {
+		const matches = [...'\\#ff00001'.matchAll(escapedHexRegex())];
+		assert.strictEqual(matches.length, 0);
+	});
+
+	it('does NOT match an 8-digit escaped string', () => {
+		const matches = [...'\\#ff0000ff'.matchAll(escapedHexRegex())];
+		assert.strictEqual(matches.length, 0);
+	});
+
+	it('matches escaped hex while ignoring adjacent unescaped one', () => {
+		const matches = [...'\\#ff0000 and #00ff00'.matchAll(escapedHexRegex())];
+		assert.strictEqual(matches.length, 1);
+		assert.strictEqual(matches[0][0], '\\#ff0000');
+	});
+
+	it('returns independent instances — no shared lastIndex state', () => {
+		const text = '\\#ff0000 \\#00ff00';
+		const a = [...text.matchAll(escapedHexRegex())];
+		const b = [...text.matchAll(escapedHexRegex())];
+		assert.strictEqual(a.length, 2);
+		assert.strictEqual(b.length, 2);
+	});
+
+	it('correctly identifies the match position (index)', () => {
+		const text = 'before \\#aabbcc after';
+		const matches = [...text.matchAll(escapedHexRegex())];
+		assert.strictEqual(matches[0].index, 7);
 	});
 });
